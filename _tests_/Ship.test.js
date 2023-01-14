@@ -4,6 +4,33 @@ const Ship = require("../src/Ship.js");
 const Itinerary = require("../src/Itinerary.js");
 
 describe("Ship", () => {
+  it("gets added to port on instantiation", () => {
+    const dover = new Port("Dover");
+    const itinerary = new Itinerary([dover]);
+    const ship = new Ship(itinerary);
+
+    expect(dover.ships).toContain(ship);
+  });
+  it("can remove a ship", () => {
+    const port = new Port("Dover");
+    const titanic = {};
+    const queenMary = {};
+
+    port.addShip(titanic);
+    port.addShip(queenMary);
+    port.removeShip(queenMary);
+
+    expect(port.ships).toEqual([titanic]);
+  });
+  it("can add a ship", () => {
+    const port = new Port("Dover");
+    const ship = {};
+
+    port.addShip(ship);
+
+    expect(port.ships).toContain(ship);
+  });
+
   it("can't sail further than its itinerary", () => {
     const dover = new Port("Dover");
     const calais = new Port("Calais");
@@ -25,6 +52,7 @@ describe("Ship", () => {
     ship.dock();
 
     expect(ship.currentPort).toBe(calais);
+    expect(calais.ships).toContain(ship);
   });
 
   it("can set sail", () => {
@@ -36,6 +64,7 @@ describe("Ship", () => {
     ship.setSail();
 
     expect(ship.currentPort).toBeFalsy();
+    expect(dover.ships).not.toContain(ship);
   });
 
   it("Constructs a new instance of a ship", () => {
